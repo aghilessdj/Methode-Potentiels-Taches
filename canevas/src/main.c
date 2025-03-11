@@ -8,19 +8,17 @@
 #include "job_2.h"
 #include "job_3.h"
 #include "rank.h"
+#include "io.h"
 
 int main(int argc, char ** argv){
 
-    printf("Aghiles est le meilleur pour toujour %d\n",argc);
-    printf("Le deuxième argument est %s\n",argv[1]);
-
-    if(argc < 3){
-        printf("Programme mal apeler\npensez à donner des argument\ntapper le nom de l'éxécutable puis ajouter les argument");
-    }
-/*
     if(argc < 2) exit(-1);
 
+    printf("Ar dagi telha %s\n",argv[1]);
+
     list_t * G = read_graph(argv[1]);
+
+    printf("Hello\n\n");
 
     printf("Liste des tÃ¢ches lue\n");
     view_list(G, &view_job);
@@ -39,6 +37,6 @@ int main(int argc, char ** argv){
 
     printf("\nMarges totales des tÃ¢ches\n");
     marges(G);
-    view_list(G,&view_job);*/
+    view_list(G,&view_job);
     return 0;
 }

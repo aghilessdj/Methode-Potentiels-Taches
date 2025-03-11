@@ -167,15 +167,5 @@ int oDegreeJobCmp(job_t * J1, job_t * J2){
 int rangJobCmp(job_t *J1, job_t * J2){
     assert(J1 && J2);
 
-    if(J1->rank > J2->rank){
-        return 1;
-    }
-    else{
-        if(J1->rank == J2->rank){
-            return 0;
-        }
-        else{
-            return -1;
-        }
-    }
+    return strcmp(J1->title , J2->title);
 }

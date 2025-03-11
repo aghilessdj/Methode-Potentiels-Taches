@@ -2,6 +2,9 @@
 #include <stdlib.h>
 #include <assert.h>
 #include "elmlist.h"
+#include "job_1.h"
+#include "job_2.h"
+#include "job_3.h"
 #include "list_1.h"
 
 list_t * new_list(){
@@ -191,20 +194,21 @@ void ordered_insert ( list_t * L, void * data , int (* cmpFct)() ){
 
 
 void find(list_t * L, void ** ptrKey, int (*cmpFct)(), void (*delFct)()) {
-    assert(L && ptrKey && cmpFct);
 
-    list_elm_t * current = L->head;
+    list_elm_t * current = L->head ;
+    job_t * tmp;
 
-    // Parcours de la liste pour trouver l'élément
     while (current != NULL) {
         // Comparer l'élément courant avec la clé
         if (cmpFct(current->data, *ptrKey) == 0) {
+            tmp = *ptrKey;
             *ptrKey = current->data; // Mettre à jour ptrKey pour pointer vers l'élément trouvé
+            delFct(tmp);
             return; // Élément trouvé, on quitte la fonction
         }
         current = current->suc; // Passer à l'élément suivant
     }
 
     // Si l'élément n'a pas été trouvé
-    *ptrKey = NULL; // On assigne NULL à ptrKey pour signaler que l'élément n'a pas été trouvé
+    ordered_insert(L , *ptrKey , cmpFct);
 }

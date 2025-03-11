@@ -1,0 +1,4 @@
+DS  2   NIL
+DC  4   DS NIL
+PC  4   DC DS NIL
+P   5   PC NIL

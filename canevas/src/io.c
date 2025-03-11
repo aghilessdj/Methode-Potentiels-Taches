@@ -11,8 +11,19 @@
 #include "rank.h"
 #include "io.h"
 
+
 void partition(list_t * L,list_elm_t * pivot,list_t * val_inf_pivot,list_t * val_sup_pivot,int (*cmpFct)()){
-    printf("Aghiles");
+    assert(L && pivot);
+    list_elm_t * aux = L->head;
+    while(aux != NULL){
+        if (cmpFct(aux->data , pivot->data) > 0){
+            ordered_insert(val_sup_pivot , aux->data , cmpFct);
+        }
+        else{
+            ordered_insert(val_inf_pivot , aux->data , cmpFct);
+        }
+        aux = aux->suc;
+    }
 }
 
 list_t * read_graph ( char * filename ) {
@@ -28,40 +39,41 @@ list_t * read_graph ( char * filename ) {
 
         job_t * J = new_job ( job_name );
 
-	/**  @note
-	    À l'appel J pointe sur le job que l'on vient de créer.
+	/** @note
+	    Ã€ l'appel J pointe sur le job que l'on vient de crÃ©er.
 	    
-	    FIND retrouve le job J dans la liste G des jobs grâce à la fonction titleJobCmp.
+	    FIND retrouve le job J dans la liste G des jobs grÃ¢ce Ã  la fonction titleJobCmp.
 	    Si ce job n'est pas dans la liste G alors
-	        le job pointé par J est enregistré dans G
-	    Si ce job est déjà dans G alors
-	        le job pointé par J est supprimé grâce à free_job
-		puis le pointeur de J est réassigné sur le job trouvé dans G
+	        le job pointÃ© par J est enregistrÃ© dans G
+	    Si ce job est dÃ©jÃ  dans G alors
+	        le job pointÃ© par J est supprimÃ© grÃ¢ce Ã  free_job
+		puis le pointeur de J est rÃ©assignÃ© sur le job trouvÃ© dans G
 	 */
 	find ( G, ( void ** ) &J, &titleJobCmp, &free_job );
 
 	fscanf ( fd, "%lf", &(J->life) );
 
 	/** @note
-	    Enregistrement des préséances
+	    Enregistrement des prÃ©sÃ©ances
 	*/
 	job_t * predJ;
+
 	fscanf( fd, " %s", job_name );
 	while ( strcmp ( job_name, "NIL" ) ) {
 	  predJ = new_job ( job_name );
     
 	  find ( G, (void **) &predJ, &titleJobCmp, &free_job );
 
-	  ordered_insert ( predJ->posteriority, J, &titleJobCmp );
+	  cons ( predJ->posteriority, J );
 	  incr_job_oDegree ( predJ );
 
-	  ordered_insert ( J->precedence, predJ, &titleJobCmp );
+	  cons ( J->precedence, predJ );
 	  incr_job_iDegree ( J );
 
 	  fscanf ( fd, " %s", job_name );
 	}
 	
-	/** @note valeurs par défaut des autres champs */
+	/** @note valeurs par dÃ©faut des autres champs */
         J->dyn_input_degree = J->input_degree;
         J->rank = UNDEF;
         J->au_plus_tard = UNDEF;
@@ -73,6 +85,7 @@ list_t * read_graph ( char * filename ) {
     view_list(G,&view_job);
     return G;
 }
+
 
 void quick_sort(list_t * L, int (*cmpFct)()){
     assert(L && cmpFct);
