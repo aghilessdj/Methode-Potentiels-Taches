@@ -1,0 +1,3 @@
+A 2 NIL
+B 2 A NIL
+C 2 A B NIL

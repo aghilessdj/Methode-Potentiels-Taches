@@ -11,7 +11,7 @@ list_elm_t * new_list_elm ( void * data );
 * @param ptrf : a ptr to fct that deallocates datum's memory ;
 * if ptrf is NULL , datum is not freed
 */
-void del_list_elm( list_elm_t * E, void (*ptrf) () );
+void del_list_elm(list_elm_t ** ptrE, void (*ptrf) ());
 
 list_elm_t * get_suc ( list_elm_t * E );
 list_elm_t * get_pred ( list_elm_t * E );

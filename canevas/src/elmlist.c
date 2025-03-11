@@ -13,15 +13,11 @@ list_elm_t * new_list_elm (void * data){
     return L;
 }
 
-void del_list_elm(list_elm_t * E, void (*ptrf) ()){
-    assert(ptrf && E);
-
-    (*ptrf) (E->data);
-    (*ptrf) (E->suc);
-    (*ptrf) (E->pred);
-
-    (*ptrf) (E);
-    E = NULL;
+void del_list_elm(list_elm_t ** ptrE, void (*ptrf) ()){
+    assert(ptrE && *ptrE);
+  if(*ptrf) (*ptrf)(&(*ptrE)->data);
+  free(*ptrE);
+  *ptrE = NULL;
 }
 
 list_elm_t * get_suc ( list_elm_t * E ){

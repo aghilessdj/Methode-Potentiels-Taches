@@ -118,18 +118,18 @@ void set_rank(job_t * J, int rank){
 
 int titleJobCmp(job_t * J1, job_t * J2){
     assert(J1 && J2);
-
-    if(J1->title > J2->title){
-        return 1;
-    }
-    else{
-        if(J1->title == J2->title){
-            return 0;
-        }
-        else{
-            return -1;
-        }
-    }
+    return strcmp(J1->title,J2->title);
+    // if(J1->title > J2->title){
+    //     return 1;
+    // }
+    // else{
+    //     if(J1->title == J2->title){
+    //         return 0;
+    //     }
+    //     else{
+    //         return -1;
+    //     }
+    // }
 }
 
 int iDegreeJobCmp(job_t * J1, job_t * J2){
@@ -165,7 +165,5 @@ int oDegreeJobCmp(job_t * J1, job_t * J2){
 }
 
 int rangJobCmp(job_t *J1, job_t * J2){
-    assert(J1 && J2);
-
-    return strcmp(J1->title , J2->title);
+    return 1;
 }

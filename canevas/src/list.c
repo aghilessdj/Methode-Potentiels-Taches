@@ -196,19 +196,19 @@ void ordered_insert ( list_t * L, void * data , int (* cmpFct)() ){
 void find(list_t * L, void ** ptrKey, int (*cmpFct)(), void (*delFct)()) {
 
     list_elm_t * current = L->head ;
-    job_t * tmp;
+    void * tmp;
 
     while (current != NULL) {
         // Comparer l'élément courant avec la clé
         if (cmpFct(current->data, *ptrKey) == 0) {
             tmp = *ptrKey;
             *ptrKey = current->data; // Mettre à jour ptrKey pour pointer vers l'élément trouvé
-            delFct(tmp);
+            delFct(&tmp);
             return; // Élément trouvé, on quitte la fonction
+            
         }
         current = current->suc; // Passer à l'élément suivant
     }
-
+    queue (L , *ptrKey );
     // Si l'élément n'a pas été trouvé
-    ordered_insert(L , *ptrKey , cmpFct);
 }

@@ -34,7 +34,7 @@ list_t * read_graph ( char * filename ) {
 
     while ( !feof ( fd ) ) {
 
-        fscanf ( fd, " %s", job_name);
+        fscanf ( fd, "%s", job_name);
         if ( !strcmp (job_name, "NIL" ) ) continue;
 
         job_t * J = new_job ( job_name );
@@ -140,4 +140,21 @@ void quick_sort(list_t * L, int (*cmpFct)()){
         free(val_inf_pivot);
         free(val_sup_pivot);
     }
+}
+
+
+void freeInt(int ** ptrI){
+	free(*ptrI);
+	*ptrI = NULL;
+}
+void freeDouble(double ** ptrD){
+	free(*ptrD);
+	*ptrD = NULL;
+}
+
+void del_elmlist(list_elm_t ** ptrE, void (*ptrf) ()) {
+  assert(ptrE && *ptrE);
+  if(*ptrf) (*ptrf)(&(*ptrE)->data);
+  free(*ptrE);
+  *ptrE = NULL;
 }
