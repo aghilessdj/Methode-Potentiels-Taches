@@ -95,7 +95,6 @@ void take_out(list_t *L, void *D) {
             else
                 L->tail = current->pred;
             
-            free(current);
             L->numelm--;
             return;
         }

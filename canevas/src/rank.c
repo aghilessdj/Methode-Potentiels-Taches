@@ -71,11 +71,28 @@ void ranking(list_t * G){
     }
     
     quick_sort(G,&rangJobCmp);
-    
 }
 
 void prune(list_t * G){
-    printf("TODO");
+
+    list_elm_t * aux = G->head;
+    job_t * J;
+    list_elm_t * tmp;
+
+    while(aux != NULL){
+        J = aux->data;
+        tmp = get_head(J->precedence);
+        while (tmp != NULL){
+            if(get_job_rank(aux->data) - get_job_rank(tmp->data) > 1){
+                job_t * J1 = aux->data , * J2 = tmp->data;
+                take_out(J1->precedence , tmp->data);
+                take_out(J2->posteriority , aux->data);
+                printf("%s----------->%s\n",get_job_tilte(tmp->data),get_job_tilte(aux->data));
+            }
+            tmp = tmp->suc;
+        }
+        aux = aux->suc;
+    }
 }
 
 void marges(list_t * G){

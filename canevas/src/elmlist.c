@@ -15,9 +15,9 @@ list_elm_t * new_list_elm (void * data){
 
 void del_list_elm(list_elm_t ** ptrE, void (*ptrf) ()){
     assert(ptrE && *ptrE);
-  if(*ptrf) (*ptrf)(&(*ptrE)->data);
-  free(*ptrE);
-  *ptrE = NULL;
+    if(*ptrf) (*ptrf)(&(*ptrE)->data);
+    free(*ptrE);
+    *ptrE = NULL;
 }
 
 list_elm_t * get_suc ( list_elm_t * E ){
