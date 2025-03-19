@@ -3,8 +3,6 @@
 #include <assert.h>
 #include <string.h>
 #include "job_1.h"
-#include "job_2.h"
-#include "job_3.h"
 
 job_t * new_empty_job ( ) {
     job_t * J = calloc ( 1, sizeof (job_t ) );
@@ -51,6 +49,8 @@ void view_job ( job_t * J ) {
     if(J->au_plus_tard == UNDEF ) printf("U"); else printf ( "%2.2lf",J->au_plus_tard );
     printf ( "\ttotale= " );
     if ( J->marge_totale == UNDEF ) printf("U"); else printf ( "%2.2lf", J->marge_totale );
+    printf ( "\tlibre= " );
+    if ( J->marge_libre == UNDEF ) printf("U"); else printf ( "%2.2lf", J->marge_libre );
     printf ( "\tcritical= " );
     if ( J->critique ) printf("Y\n"); else printf ( "N\n" );
 }
@@ -119,17 +119,6 @@ void set_rank(job_t * J, int rank){
 int titleJobCmp(job_t * J1, job_t * J2){
     assert(J1 && J2);
     return strcmp(J1->title,J2->title);
-    // if(J1->title > J2->title){
-    //     return 1;
-    // }
-    // else{
-    //     if(J1->title == J2->title){
-    //         return 0;
-    //     }
-    //     else{
-    //         return -1;
-    //     }
-    // }
 }
 
 int iDegreeJobCmp(job_t * J1, job_t * J2){
@@ -175,5 +164,75 @@ int rangJobCmp(job_t *J1, job_t * J2){
         else{
             return -1;
         }
+    }
+}
+
+//fonction ajouter pour le sous programme marges
+
+double get_job_tot(job_t * J){
+    assert(J);
+    return J->au_plus_tot;
+}
+double get_job_tard(job_t * J){
+    assert(J);
+    return J->au_plus_tard;
+}
+
+double max_tot_life (list_t * G){
+
+    double max = 0.00;
+    if (!is_empty(G)){
+        list_elm_t * aux = G->head;
+        job_t * j = aux->data;
+        max = j->au_plus_tot + j->life;
+        aux = aux->suc;
+        while (aux != NULL){
+            j = aux->data;
+            if(max < j->au_plus_tot + j->life){
+                max = j->au_plus_tot + j->life;
+            }
+            aux = aux->suc;
+        }
+    }
+    return max;
+}
+
+double min_tard (list_t * G){
+    if (!is_empty(G)){
+        list_elm_t * aux = G->head;
+        job_t * j = aux->data;
+        double min = get_job_tard(j);
+        aux = aux->suc;
+        while (aux != NULL){
+            j = aux->data;
+            if(min > j->au_plus_tard){
+                min = j->au_plus_tard;
+            }
+            aux = aux->suc;
+        }
+        return min;
+    }
+    else{
+        return 0;
+    }
+}
+
+double min_tot (list_t * G){
+    if (!is_empty(G)){
+        list_elm_t * aux = G->head;
+        job_t * j = aux->data;
+        double min = get_job_tot(j);
+        aux = aux->suc;
+        while (aux != NULL){
+            j = aux->data;
+            if(min > j->au_plus_tot){
+                min = j->au_plus_tot;
+            }
+            aux = aux->suc;
+        }
+        return min;
+    }
+    else{
+        return 0;
     }
 }
