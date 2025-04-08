@@ -57,9 +57,10 @@ int oDegreeJobCmp(job_t * J1, job_t * J2);
 int rangJobCmp(job_t *J1, job_t * J2);
 
 //Les fonction ajouter
-double get_job_tot(job_t * J);
-double get_job_tard(job_t * J);
+double get_job_tot(job_t * J); // Retourne Date au plus tôt d'un job
+double get_job_tard(job_t * J); // Retourne Date au plus tard d'un job
 
-double max_tot_life (list_t * G);
-double min_tard (list_t * G);
-double min_tot (list_t * G);
+int max_rank(list_t * G); // Retourne la valeur du rank la plus grande dans une liste de job
+double max_tot_life (list_t * G); // Retourne la valeur du life la plus grande dans une liste de job
+double min_tard (list_t * G); // Retourne la valeur du Date au plus tard la plus petite dans une liste de job
+double min_tot (list_t * G); // Retourne la valeur du Date au plus tôt la plus petite dans une liste de job

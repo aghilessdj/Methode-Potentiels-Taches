@@ -51,7 +51,7 @@ void view_job ( job_t * J ) {
     if ( J->marge_totale == UNDEF ) printf("U"); else printf ( "%2.2lf", J->marge_totale );
     printf ( "\tlibre= " );
     if ( J->marge_libre == UNDEF ) printf("U"); else printf ( "%2.2lf", J->marge_libre );
-    printf ( "\tcritical= " );
+    printf ( "\tcritical= " ); // Affichage de marge libre
     if ( J->critique ) printf("Y\n"); else printf ( "N\n" );
 }
 
@@ -176,6 +176,18 @@ double get_job_tot(job_t * J){
 double get_job_tard(job_t * J){
     assert(J);
     return J->au_plus_tard;
+}
+
+int max_rank (list_t * G){
+    int max = 0;
+    list_elm_t * aux = G->head;
+    while (aux != NULL){
+        if(get_job_rank(aux->data) > max){
+            max = get_job_rank(aux->data);
+        }
+        aux = aux->suc;
+    }
+    return max;
 }
 
 double max_tot_life (list_t * G){

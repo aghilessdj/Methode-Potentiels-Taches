@@ -11,11 +11,7 @@ int main(int argc, char ** argv){
 
     if(argc < 2) exit(-1);
 
-    printf("Ar dagi telha\n");
-
     list_t * G = read_graph(argv[1]);
-
-    printf("Hello\n\n");
 
     printf("Liste des tÃ¢ches lue\n");
     view_list(G, &view_job);

@@ -10,16 +10,17 @@
 
 
 void partition(list_t * L,list_elm_t * pivot,list_t * val_inf_pivot,list_t * val_sup_pivot,int (*cmpFct)()){
+    // Diviser une liste en deux en fonction d'un pivot
     assert(L && pivot);
     list_elm_t * aux = L->head;
     while(aux != NULL){
-        if (cmpFct(aux->data , pivot->data) > 0){
+        if (cmpFct(aux->data , pivot->data) > 0){ // Si la valeur est supérieure au pivot
             ordered_insert(val_sup_pivot , aux->data , cmpFct);
         }
-        else{
+        else{ // Si la valeur est inférieure ou égale au pivot
             ordered_insert(val_inf_pivot , aux->data , cmpFct);
         }
-        aux = aux->suc;
+        aux = aux->suc; // 
     }
 }
 
@@ -137,21 +138,4 @@ void quick_sort(list_t * L, int (*cmpFct)()){
         free(val_inf_pivot);
         free(val_sup_pivot);
     }
-}
-
-
-void freeInt(int ** ptrI){
-	free(*ptrI);
-	*ptrI = NULL;
-}
-void freeDouble(double ** ptrD){
-	free(*ptrD);
-	*ptrD = NULL;
-}
-
-void del_elmlist(list_elm_t ** ptrE, void (*ptrf) ()) {
-  assert(ptrE && *ptrE);
-  if(*ptrf) (*ptrf)(&(*ptrE)->data);
-  free(*ptrE);
-  *ptrE = NULL;
 }

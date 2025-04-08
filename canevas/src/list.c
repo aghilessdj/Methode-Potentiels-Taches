@@ -6,18 +6,19 @@
 #include "list_1.h"
 
 list_t * new_list(){
-
+    //alouer un espace mémoire de taille du type list
     list_t *L=calloc(1,sizeof(list_t));
-
+    //initialiser la tête et le dernier element à NULL
     L->head = NULL;
     L->tail = NULL;
-    L->numelm = 0;
+    L->numelm = 0;//initialiser le nombre d'element à 0
 
     return L;
 }
 
 void del_list (list_t ** ptrL,void (*ptrf) ()){
-    assert(ptrL && *ptrL && ptrf);
+    //supprimer une liste avec la supression de la mémoire alouer
+    assert(*ptrL && ptrL && ptrf);
     
     list_elm_t *current = (*ptrL)->head;
     list_elm_t *temp;
@@ -33,12 +34,12 @@ void del_list (list_t ** ptrL,void (*ptrf) ()){
         free(temp); // Libérer le nœud
     }
     
-
     free(*ptrL);
     *ptrL = NULL;
 }
 
 void clean(list_t * L){
+    //supprimer les noeud de la list sans supprimer les données (data)
     assert(L);
 
     list_elm_t *current = L->head;
@@ -55,28 +56,28 @@ void clean(list_t * L){
     L->numelm = 0;
 }
 
-bool is_empty ( list_t * L ){
+bool is_empty ( list_t * L ){ // vérifie si la list est vide 
     assert(L);
-
     return L->numelm == 0;
 }
 
-list_elm_t * get_head ( list_t * L ){
+list_elm_t * get_head ( list_t * L ){ // retourne la tête de la list
     assert(L);
     return L->head;
 }
 
-list_elm_t * get_tail ( list_t * L ){
+list_elm_t * get_tail ( list_t * L ){ // retourne le dernier element d'une liste
     assert(L);
     return L->tail;
 }
 
-int get_numelm(list_t * L){
+int get_numelm(list_t * L){ // retoune le nombre d'élément d'une liste
     assert(L);
     return L->numelm;
 }
 
 void take_out(list_t *L, void *D) {
+    // retirer une donnée d'une liste sans libérer sa mémoire
     assert(L && D);
     
     list_elm_t *current = L->head;
@@ -101,12 +102,13 @@ void take_out(list_t *L, void *D) {
 }
 
 void cons ( list_t * L, void * data ){
+    // ajouter une donnée dans la tête d'une liste
     assert(L);
 
     if (!L) return;
     
     list_elm_t *new_elem = (list_elm_t *)malloc(sizeof(list_elm_t));
-    if (!new_elem) return; // Vérification de l'allocation
+    assert(new_elem); // Vérification de l'allocation
     
     new_elem->data = data;
     new_elem->suc = L->head;
@@ -123,10 +125,11 @@ void cons ( list_t * L, void * data ){
 }
 
 void queue ( list_t * L, void * data ){
-    if (!L) return;
+    // ajouter une donnée à la fin d'une liste
+    assert(L);
     
     list_elm_t *new_elem = (list_elm_t *)malloc(sizeof(list_elm_t));
-    if (!new_elem) return; // Vérification de l'allocation
+    assert(new_elem); // Vérification de l'allocation
     
     new_elem->data = data;
     new_elem->suc = NULL;
@@ -139,30 +142,32 @@ void queue ( list_t * L, void * data ){
     }
     
     L->tail = new_elem;
-    L->numelm++;
+    L->numelm++;// incrémenté le nombre d'element
 }
 
 void view_list ( list_t * L, void (*ptrf)() ){
+    // Affichage d'une liste
     assert(L && ptrf);
     
     list_elm_t *current = L->head;
     while (current) {
         ptrf(current->data);
-        current = current->suc;
+        current = current->suc; //incrémentation
     }
 }
 
 void ordered_insert ( list_t * L, void * data , int (* cmpFct)() ){
+    // insérer une donnée en ordre
     assert(L && cmpFct);
     
     list_elm_t *new_elem = (list_elm_t *)malloc(sizeof(list_elm_t));
-    if (!new_elem) return;
+    assert(new_elem);
     
     new_elem->data = data;
     new_elem->suc = NULL;
     new_elem->pred = NULL;
     
-    if (!L->head) { // Si la liste est vide
+    if (!L->head) { //Si la liste est vide
         L->head = L->tail = new_elem;
     } else {
         list_elm_t *current = L->head;
@@ -170,15 +175,15 @@ void ordered_insert ( list_t * L, void * data , int (* cmpFct)() ){
             current = current->suc;
         }
         
-        if (!current) { // Insérer à la fin
+        if (!current) { //Insérer à la fin
             new_elem->pred = L->tail;
             L->tail->suc = new_elem;
             L->tail = new_elem;
-        } else if (!current->pred) { // Insérer au début
+        } else if (!current->pred) { //Insérer au début
             new_elem->suc = L->head;
             L->head->pred = new_elem;
             L->head = new_elem;
-        } else { // Insérer au milieu
+        } else { //Insérer au milieu
             new_elem->suc = current;
             new_elem->pred = current->pred;
             current->pred->suc = new_elem;
@@ -193,19 +198,16 @@ void ordered_insert ( list_t * L, void * data , int (* cmpFct)() ){
 void find(list_t * L, void ** ptrKey, int (*cmpFct)(), void (*delFct)()) {
 
     list_elm_t * current = L->head ;
-    void * tmp;
 
     while (current != NULL) {
         // Comparer l'élément courant avec la clé
         if (cmpFct(current->data, *ptrKey) == 0) {
-            tmp = *ptrKey;
+            delFct(ptrKey);
             *ptrKey = current->data; // Mettre à jour ptrKey pour pointer vers l'élément trouvé
-            delFct(&tmp);
             return; // Élément trouvé, on quitte la fonction
-            
         }
         current = current->suc; // Passer à l'élément suivant
     }
-    queue (L , *ptrKey );
     // Si l'élément n'a pas été trouvé
+    queue (L , *ptrKey );
 }
