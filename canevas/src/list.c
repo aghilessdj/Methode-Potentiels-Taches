@@ -104,10 +104,8 @@ void take_out(list_t *L, void *D) {
 void cons ( list_t * L, void * data ){
     // ajouter une donnée dans la tête d'une liste
     assert(L);
-
-    if (!L) return;
     
-    list_elm_t *new_elem = (list_elm_t *)malloc(sizeof(list_elm_t));
+    list_elm_t *new_elem = malloc(sizeof(list_elm_t));
     assert(new_elem); // Vérification de l'allocation
     
     new_elem->data = data;
@@ -128,7 +126,7 @@ void queue ( list_t * L, void * data ){
     // ajouter une donnée à la fin d'une liste
     assert(L);
     
-    list_elm_t *new_elem = (list_elm_t *)malloc(sizeof(list_elm_t));
+    list_elm_t *new_elem = malloc(sizeof(list_elm_t));
     assert(new_elem); // Vérification de l'allocation
     
     new_elem->data = data;
@@ -209,5 +207,5 @@ void find(list_t * L, void ** ptrKey, int (*cmpFct)(), void (*delFct)()) {
         current = current->suc; // Passer à l'élément suivant
     }
     // Si l'élément n'a pas été trouvé
-    queue (L , *ptrKey );
+    cons (L , *ptrKey );
 }

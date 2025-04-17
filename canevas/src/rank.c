@@ -8,45 +8,50 @@
 
 // Dans les fonctions suivantes on a suposé que la liste G n'est pas vide
 
-void ranking(list_t * G){
-    // Calcule des ranks des jobs de la liste
-    list_elm_t * aux = G->head;
-    job_t * J;
+void ranking(list_t *G) {
     bool undef = true;
- 
-    while (undef){// Tant qu'il y a un job qui n'a pas encore un rang
-        undef = false;
-        while(aux != NULL){
-            J = aux->data;
-            if(is_empty(J->precedence)){// Si le job n'a pas de tâches précédentes
-                J->rank = 0;// Son rang est 0
-                aux = aux->suc;// Aller vers l'élément suivant
-                J = aux->data;
-            }
-            else{ // Le job a des tâches précédentes
-                list_elm_t * current = get_head(J->precedence);
-                while(current != NULL){// parcour la liste des tâches précédentes
-                    if(get_job_rank(current->data) == UNDEF){// Si il y a un job qui n'a pas de rang dans cette liste de taches précédentes
-                        aux = aux->suc;// aller ver le job suivant dans la liste principale
-                        J = aux->data;
-                        if(is_empty(J->precedence)){// Si le job n'a pas de tâches précédentes
-                            J->rank = 0;
-                            aux = aux->suc;
-                            J = aux->data;
-                        }
-                        current = get_head(J->precedence);
-                        undef = true;// on a laisser un job qui n'a pas encore de rang
+    
+    while (undef) {//Tant qu'il y a un job avec un rang indéfinie
+
+        undef = false; // On suppose que les rangs sont définies au début
+        
+        list_elm_t *aux = G->head;
+        while (aux != NULL) {
+            job_t *J = aux->data;
+            
+            if (get_job_rank(J) == UNDEF) {
+                bool tous_precedents_definis = true;
+                
+                // Vérifie que tous les précédents ont un rang
+                list_elm_t * tmp = get_head(J->precedence);
+                while (tmp != NULL) {
+                    if (get_job_rank(tmp->data) == UNDEF) {
+                        tous_precedents_definis = false;
+                        break;
                     }
-                    current = current->suc; // l'élément suivant dans la liste des précédentes
+                    tmp = tmp->suc;
                 }
-                J->rank = 1 + max_rank(J->precedence); //Le rang du job est le max des rangs de ses précédents + 1
-                aux = aux->suc;// Aller vers l'élément suivant
+                
+                if (tous_precedents_definis) {
+                    if (is_empty(J->precedence)) {
+                        J->rank = 0;
+                    } else {
+                        J->rank = 1 + max_rank(J->precedence);
+                    }
+                }
+                else {
+                    undef = true; // Il reste des jobs non encore définis
+                }
             }
+        
+            aux = aux->suc;
         }
-        aux = G->head;// On retourne vers le début de la liste
     }
-    quick_sort(G,&rangJobCmp);// trier la liste par rang croissant
+    
+    // Une fois les rangs attribués, on trie la liste selon le rang
+    quick_sort(G, &rangJobCmp);
 }
+
 
 void prune(list_t * G){
     // Supprime les arcs inutils
@@ -64,7 +69,7 @@ void prune(list_t * G){
                 set_job_iDegree(J1 , get_job_iDegree(J1)-1);
                 take_out(J2->posteriority , aux->data);// Enlever le job des taches qui suivent
                 set_job_oDegree(J2 , get_job_oDegree(J2)-1);
-                printf("edge [ %s---------->%s ] is pruned from G\n",get_job_tilte(tmp->data),get_job_tilte(aux->data));// Afficher l'arc supprimer
+                printf("edge [ %s----------->%s ] is pruned from G\n",get_job_tilte(tmp->data),get_job_tilte(aux->data));// Afficher l'arc supprimer
             }
             tmp = tmp->suc;
         }

@@ -6,6 +6,7 @@
 list_elm_t * new_list_elm (void * data){
 
     list_elm_t * L = calloc(1,sizeof(list_elm_t));
+    assert(L);
     L->data = data;
     L->suc = NULL;
     L->pred = NULL;
