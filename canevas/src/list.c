@@ -88,7 +88,7 @@ void take_out(list_t *L, void *D) {
                 current->pred->suc = current->suc;
             else
                 L->head = current->suc;
-            
+
             if (current->suc)
                 current->suc->pred = current->pred;
             else

@@ -154,6 +154,7 @@ int oDegreeJobCmp(job_t * J1, job_t * J2){
 }
 
 int rangJobCmp(job_t *J1, job_t * J2){
+    assert(J1 && J2);
     if(J1->rank > J2->rank){
         return 1;
     }
@@ -179,19 +180,21 @@ double get_job_tard(job_t * J){
 }
 
 int max_rank (list_t * G){
+    
     int max = 0;
-    list_elm_t * aux = G->head;
-    while (aux != NULL){
-        if(get_job_rank(aux->data) > max){
-            max = get_job_rank(aux->data);
+    if(!is_empty(G)){
+        list_elm_t * aux = G->head;
+        while (aux != NULL){
+            if(get_job_rank(aux->data) > max){
+                max = get_job_rank(aux->data);
+            }
+            aux = aux->suc;
         }
-        aux = aux->suc;
     }
     return max;
 }
 
 double max_tot_life (list_t * G){
-
     double max = 0.00;
     if (!is_empty(G)){
         list_elm_t * aux = G->head;
