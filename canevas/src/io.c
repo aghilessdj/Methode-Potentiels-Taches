@@ -15,10 +15,10 @@ void partition(list_t * L,list_elm_t * pivot,list_t * val_inf_pivot,list_t * val
     list_elm_t * aux = L->head;
     while(aux != NULL){
         if (cmpFct(aux->data , pivot->data) > 0){ // Si la valeur est supérieure au pivot
-            ordered_insert(val_sup_pivot , aux->data , cmpFct);
+            cons (val_sup_pivot , aux->data);
         }
         else{ // Si la valeur est inférieure ou égale au pivot
-            ordered_insert(val_inf_pivot , aux->data , cmpFct);
+            cons (val_inf_pivot , aux->data);
         }
         aux = aux->suc; // 
     }
@@ -135,6 +135,8 @@ void quick_sort(list_t * L, int (*cmpFct)()){
             L->tail = val_sup_pivot->tail;
             L->numelm += val_sup_pivot->numelm;
         }
+        free(val_inf_pivot->head);
+        free(val_inf_pivot->tail);
         free(val_inf_pivot);
         free(val_sup_pivot);
     }
