@@ -135,8 +135,6 @@ void quick_sort(list_t * L, int (*cmpFct)()){
             L->tail = val_sup_pivot->tail;
             L->numelm += val_sup_pivot->numelm;
         }
-        free(val_inf_pivot->head);
-        free(val_inf_pivot->tail);
         free(val_inf_pivot);
         free(val_sup_pivot);
     }
